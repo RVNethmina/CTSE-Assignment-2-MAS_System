@@ -5,3 +5,4 @@ pydantic
 pytest
 python-dotenv
 typing-extensions
+pypdf
