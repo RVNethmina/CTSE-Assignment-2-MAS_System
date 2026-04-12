@@ -26,6 +26,11 @@ def parse_args() -> argparse.Namespace:
         default="Analyze this project against the brief and identify missing work.",
         help="User request for the MAS.",
     )
+    parser.add_argument(
+        "--model",
+        default="llama3",
+        help="Local Ollama model name.",
+    )
     return parser.parse_args()
 
 
@@ -38,6 +43,7 @@ def main() -> None:
         "user_request": args.request,
         "brief_path": args.brief,
         "project_path": args.project,
+        "llm_model": args.model,
     }
 
     logger.info("Starting Project Rescue MAS workflow.")

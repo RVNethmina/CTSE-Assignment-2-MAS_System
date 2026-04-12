@@ -20,6 +20,7 @@ class ProjectState(TypedDict, total=False):
     project_path: str
     team_members: list[str]
     deadline: str
+    llm_model: str
 
     provided_inputs: list[str]
     validation_issues: list[str]

@@ -4,3 +4,23 @@
 2026-04-12 23:19:49,087 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
 2026-04-12 23:19:49,092 | INFO | project_rescue_mas | Intake agent started.
 2026-04-12 23:19:49,093 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-12 23:27:11,563 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-12 23:27:11,570 | INFO | project_rescue_mas | Intake agent started.
+2026-04-12 23:27:11,572 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-12 23:27:11,572 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-12 23:35:01,836 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-12 23:35:01,843 | INFO | project_rescue_mas | Intake agent started.
+2026-04-12 23:35:01,844 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-12 23:35:01,844 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-12 23:35:01,844 | WARNING | project_rescue_mas | Brief analyst agent could not extract brief content.
+2026-04-12 23:35:21,124 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-12 23:35:21,132 | INFO | project_rescue_mas | Intake agent started.
+2026-04-12 23:35:21,133 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-12 23:35:21,134 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-12 23:35:21,134 | WARNING | project_rescue_mas | Brief analyst agent could not extract brief content.
+2026-04-12 23:35:48,810 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-12 23:35:48,817 | INFO | project_rescue_mas | Intake agent started.
+2026-04-12 23:35:48,817 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-12 23:35:48,818 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-12 23:35:49,296 | WARNING | project_rescue_mas | LLM extraction failed. Falling back to heuristic extraction.
+2026-04-12 23:35:49,298 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
