@@ -24,3 +24,15 @@
 2026-04-12 23:35:48,818 | INFO | project_rescue_mas | Brief analyst agent started.
 2026-04-12 23:35:49,296 | WARNING | project_rescue_mas | LLM extraction failed. Falling back to heuristic extraction.
 2026-04-12 23:35:49,298 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-12 23:57:45,480 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-12 23:57:45,489 | INFO | project_rescue_mas | Intake agent started.
+2026-04-12 23:57:45,489 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-12 23:57:45,491 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-12 23:58:31,598 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-13 00:02:44,671 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-13 00:02:44,685 | INFO | project_rescue_mas | Intake agent started.
+2026-04-13 00:02:44,687 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-13 00:02:44,687 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-13 00:02:50,225 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-13 00:02:50,226 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-13 00:02:50,229 | INFO | project_rescue_mas | Repository auditor agent completed successfully.

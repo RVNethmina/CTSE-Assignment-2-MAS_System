@@ -61,6 +61,7 @@ def ensure_defaults(state: ProjectState) -> ProjectState:
     state.setdefault("member_assignments", [])
     state.setdefault("demo_checklist", [])
     state.setdefault("report_outline", [])
+    state.setdefault("repo_summary", "")
     state.setdefault("logs", [])
     return state
 
