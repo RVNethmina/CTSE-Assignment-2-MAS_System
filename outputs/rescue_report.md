@@ -1,6 +1,6 @@
 # Project Rescue Report
 
-Generated at: **2026-04-14 18:13:03**
+Generated at: **2026-04-14 18:16:54**
 
 ## Executive Summary
 This report analyzes the provided project against the assignment brief and identifies the most important gaps before submission.
@@ -75,7 +75,7 @@ Build a local system that helps a volunteer organization process incoming help r
 | Student 4 | Risk and Delivery Strategist Agent | rescue_plan_writer | Turn audit findings into blockers, priorities, action plans, and final report outputs. |
 
 ## Repository Summary
-Project contains 6 files and 5 directories. Detected artifacts: configuration, documentation, source_code. Agent files: 2, Tool files: 1, Test files: 0, Logging evidence: no, Output writer evidence: no.
+Project contains 6 files and 4 directories. Detected artifacts: configuration, documentation, source_code. Agent files: 2, Tool files: 1, Test files: 0, Logging evidence: no, Output writer evidence: no.
 
 ## Compliance Snapshot
 | Check | Status |
