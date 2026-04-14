@@ -17,19 +17,6 @@ def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
 
     project_path = state.get("project_path", "")
 
-    if audit_result.agent_file_count < 3:
-        if "source_code" not in state["missing_artifacts"]:
-            state["missing_artifacts"].append("insufficient_agents")
-
-    if audit_result.tool_file_count < 1:
-        state["missing_artifacts"].append("missing_tools")
-
-    if not audit_result.has_logging_evidence:
-        state["missing_artifacts"].append("missing_logging")
-
-    if not audit_result.has_output_writer_evidence:
-        state["missing_artifacts"].append("missing_output_writer")
-
     logger.info("Repository auditor agent started.")
 
     audit_result = audit_repository(project_path=project_path)
@@ -41,7 +28,7 @@ def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
     if audit_result.issues:
         state["validation_issues"].extend(audit_result.issues)
 
-        state["repo_summary"] = (
+    state["repo_summary"] = (
         f"Project contains {audit_result.total_files} files and "
         f"{audit_result.total_directories} directories. "
         f"Detected artifacts: {', '.join(audit_result.detected_artifacts) or 'none'}. "
@@ -66,6 +53,18 @@ def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
         if artifact not in audit_result.detected_artifacts:
             state["missing_artifacts"].append(artifact)
 
+    if audit_result.agent_file_count < 3:
+        state["missing_artifacts"].append("insufficient_agents")
+
+    if audit_result.tool_file_count < 1:
+        state["missing_artifacts"].append("missing_tools")
+
+    if not audit_result.has_logging_evidence:
+        state["missing_artifacts"].append("missing_logging")
+
+    if not audit_result.has_output_writer_evidence:
+        state["missing_artifacts"].append("missing_output_writer")
+
     logger.info("Repository auditor agent completed successfully.")
 
     state["logs"].append(
@@ -79,10 +78,10 @@ def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
                 "detected_artifacts": audit_result.detected_artifacts,
                 "missing_artifacts": state["missing_artifacts"],
                 "repo_audit": state.get("repo_findings", {}).get("repo_audit", {}),
-                "agent_file_count": agent_file_count,
-                "tool_file_count": tool_file_count,
-                "test_file_count": test_file_count,
-                "has_logging_evidence": has_logging_evidence,
+                "agent_file_count": audit_result.agent_file_count,
+                "tool_file_count": audit_result.tool_file_count,
+                "test_file_count": audit_result.test_file_count,
+                "has_logging_evidence": audit_result.has_logging_evidence,
             },
         )
     )

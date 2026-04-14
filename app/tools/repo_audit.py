@@ -108,6 +108,12 @@ def audit_repository(project_path: str) -> RepoAuditResult:
         "docs_like_directories": 0,
     }
 
+    agent_file_count = 0
+    tool_file_count = 0
+    test_file_count = 0
+    has_logging_evidence = False
+    has_output_writer_evidence = False
+
     try:
         top_level_items = sorted(item.name for item in root.iterdir())
     except OSError as exc:
@@ -169,32 +175,31 @@ def audit_repository(project_path: str) -> RepoAuditResult:
             if "test" in name_lower:
                 detected_artifacts.add("tests")
 
+            path_parts_lower = [part.lower() for part in path.parts]
+
+            if "agents" in path_parts_lower and path.suffix.lower() == ".py":
+                agent_file_count += 1
+
+            if "tools" in path_parts_lower and path.suffix.lower() == ".py":
+                tool_file_count += 1
+
+            if "tests" in path_parts_lower or path.name.lower().startswith("test_"):
+                test_file_count += 1
+                detected_artifacts.add("tests")
+
+            if path.name.lower() in {"logger.py", "logging.py"}:
+                has_logging_evidence = True
+
+            if any(keyword in path.name.lower() for keyword in ("writer", "report", "output")):
+                has_output_writer_evidence = True
+
     if "README.md" not in top_level_items:
         issues.append("README.md is missing from the project root.")
 
     if total_files == 0:
         issues.append("Project contains no files.")
-    
-    relative_path = _safe_relative_path(path, root).replace("\\", "/")
-    path_parts_lower = [part.lower() for part in path.parts]
 
-    if "agents" in path_parts_lower and path.suffix.lower() == ".py":
-        agent_file_count += 1
-
-    if "tools" in path_parts_lower and path.suffix.lower() == ".py":
-        tool_file_count += 1
-
-    if "tests" in path_parts_lower or path.name.lower().startswith("test_"):
-        test_file_count += 1
-        detected_artifacts.add("tests")
-
-    if path.name.lower() in {"logger.py", "logging.py"}:
-        has_logging_evidence = True
-
-    if any(keyword in path.name.lower() for keyword in ("writer", "report", "output")):
-        has_output_writer_evidence = True
-
-        return RepoAuditResult(
+    return RepoAuditResult(
         project_path=str(root),
         total_files=total_files,
         total_directories=total_directories,
@@ -208,4 +213,4 @@ def audit_repository(project_path: str) -> RepoAuditResult:
         has_logging_evidence=has_logging_evidence,
         has_output_writer_evidence=has_output_writer_evidence,
         issues=issues,
-    )
+    )
