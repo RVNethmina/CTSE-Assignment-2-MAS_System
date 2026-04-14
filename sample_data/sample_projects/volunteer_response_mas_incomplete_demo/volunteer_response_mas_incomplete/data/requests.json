@@ -1,0 +1,20 @@
+[
+  {
+    "request_id": "VR-001",
+    "category": "Medical transport",
+    "details": "Urgent ride needed for elderly patient to clinic",
+    "location": "Negombo"
+  },
+  {
+    "request_id": "VR-002",
+    "category": "Food delivery",
+    "details": "Weekly grocery support for family",
+    "location": "Ja-Ela"
+  },
+  {
+    "request_id": "VR-003",
+    "category": "Flood cleanup",
+    "details": "Need volunteers for urgent cleanup assistance",
+    "location": "Wattala"
+  }
+]

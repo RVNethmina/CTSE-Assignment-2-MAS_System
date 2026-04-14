@@ -1,6 +1,6 @@
 # Project Rescue Report
 
-Generated at: **2026-04-14 17:58:00**
+Generated at: **2026-04-14 18:13:03**
 
 ## Executive Summary
 This report analyzes the provided project against the assignment brief and identifies the most important gaps before submission.
@@ -15,20 +15,67 @@ This report analyzes the provided project against the assignment brief and ident
 - Final output/report generation evidence is missing.
 
 ## Brief Summary
-Design, build, and deploy a locally-hosted Multi-Agent System (MAS) that automates a complex, multi-step problem.
+Build a local system that helps a volunteer organization process incoming help requests.
 
 ## Extracted Assignment Requirements
-- Use local Small Language Models (SLMs) via Ollama
-- Utilize at least 3 to 4 distinct agents interacting with one another
-- Include custom Python tools that allow agents to interact with the real world
+- The system should operate as a multi-agent workflow rather than a single assistant.
+- Use 4 distinct agents with clearly separated responsibilities.
+- At least 1 custom Python tool must interact with files or structured local data.
 
 ## Technical Constraints
-- The system must run entirely on your local machines
-- Use an open-source framework like LangGraph, CrewAI, or AutoGen to manage the state and routing
-- Do not use paid API keys (OpenAI, Anthropic, etc.)
+- Run fully on a local machine.
+- Use Python for the implementation.
+- Do not depend on paid APIs.
+- Use structured shared state between agents.
+- Include logging or tracing so the execution flow can be inspected.
+
+## Agent Design Snapshot
+### IntakeAndScopeAgent
+- **Owner:** Student 1
+- **Role:** Intake and Scope Agent
+- **Persona:** A careful project intake coordinator that validates evidence before analysis begins.
+- **Objective:** Validate input paths, identify basic project characteristics, and initialize workflow state.
+- **Constraints:** Do not invent missing files or assume project structure without evidence.
+- **Owned Tool:** project_input_validator
+- **System Prompt:** You are the Intake and Scope Agent. Validate the provided brief and project path, summarize what was received, and prepare clean initial state for downstream agents. Never invent files, folders, or evidence.
+
+### BriefAndRubricAnalystAgent
+- **Owner:** Student 2
+- **Role:** Brief and Rubric Analyst Agent
+- **Persona:** A rubric-focused academic analyst that extracts only supported requirements.
+- **Objective:** Read the assignment brief and extract deliverables, constraints, and grading signals.
+- **Constraints:** Do not hallucinate requirements that are not explicitly or strongly supported by the brief.
+- **Owned Tool:** brief_parser
+- **System Prompt:** You are the Brief and Rubric Analyst Agent. Extract concrete requirements, submission components, constraints, and grading signals from the assignment brief. Return only supported findings.
+
+### RepositoryAndEvidenceAuditorAgent
+- **Owner:** Student 3
+- **Role:** Repository and Evidence Auditor Agent
+- **Persona:** A strict repository auditor that works only from real file-system evidence.
+- **Objective:** Inspect the repository structure and summarize what has actually been built.
+- **Constraints:** Do not treat assumptions as evidence. Only report what the repository shows.
+- **Owned Tool:** repo_audit
+- **System Prompt:** You are the Repository and Evidence Auditor Agent. Inspect the provided project folder, count important implementation evidence, and identify missing or weak areas based only on actual repository contents.
+
+### RiskAndDeliveryStrategistAgent
+- **Owner:** Student 4
+- **Role:** Risk and Delivery Strategist Agent
+- **Persona:** A practical delivery strategist focused on submission readiness and risk reduction.
+- **Objective:** Turn audit findings into blockers, priorities, action plans, and final report outputs.
+- **Constraints:** Prioritize the highest-mark-impact issues first and avoid vague recommendations.
+- **Owned Tool:** rescue_plan_writer
+- **System Prompt:** You are the Risk and Delivery Strategist Agent. Compare requirements against evidence, identify critical blockers, prioritize next steps, assign ownership, and produce a clear submission rescue plan.
+
+## Contribution Matrix
+| Student | Agent | Owned Tool | Main Focus |
+|---|---|---|---|
+| Student 1 | Intake and Scope Agent | project_input_validator | Validate input paths, identify basic project characteristics, and initialize workflow state. |
+| Student 2 | Brief and Rubric Analyst Agent | brief_parser | Read the assignment brief and extract deliverables, constraints, and grading signals. |
+| Student 3 | Repository and Evidence Auditor Agent | repo_audit | Inspect the repository structure and summarize what has actually been built. |
+| Student 4 | Risk and Delivery Strategist Agent | rescue_plan_writer | Turn audit findings into blockers, priorities, action plans, and final report outputs. |
 
 ## Repository Summary
-Project contains 5 files and 4 directories. Detected artifacts: configuration, documentation, source_code. Agent files: 2, Tool files: 1, Test files: 0, Logging evidence: no, Output writer evidence: no.
+Project contains 6 files and 5 directories. Detected artifacts: configuration, documentation, source_code. Agent files: 2, Tool files: 1, Test files: 0, Logging evidence: no, Output writer evidence: no.
 
 ## Compliance Snapshot
 | Check | Status |
