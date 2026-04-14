@@ -25,7 +25,7 @@ def _format_list(items: list[str], empty_text: str = "None") -> str:
 
 
 def _priority_label(text: str) -> str:
-    """Assign a simple priority label based on issue wording."""
+    """Assign a simple priority label based on action wording."""
     lowered = text.lower()
 
     high_keywords = (
@@ -35,12 +35,16 @@ def _priority_label(text: str) -> str:
         "insufficient",
         "logging",
         "tests",
-        "source code",
+        "test",
+        "agent",
+        "output",
+        "report generation",
     )
     medium_keywords = (
         "cross-check",
         "verify",
         "improve",
+        "polish",
     )
 
     if any(keyword in lowered for keyword in high_keywords):
@@ -87,6 +91,17 @@ def _compliance_snapshot(state: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _final_recommendation(readiness_score: int) -> str:
+    """Generate a short final recommendation based on readiness score."""
+    if readiness_score >= 85:
+        return "The project is in strong shape. Focus on polishing the demo, validating edge cases, and tightening documentation."
+    if readiness_score >= 65:
+        return "The project is partially ready, but a few important gaps still need attention before submission."
+    if readiness_score >= 40:
+        return "The project is at moderate risk. Focus first on the highest-impact missing components before polishing anything else."
+    return "The project is not submission-ready yet. Resolve the critical blockers first: missing agents, missing tests, missing observability, and missing final output generation."
+
+
 def build_markdown_report(state: dict[str, Any]) -> str:
     """Build a polished markdown rescue report from workflow state."""
     brief_summary = state.get("brief_summary", "No brief summary available.")
@@ -101,6 +116,8 @@ def build_markdown_report(state: dict[str, Any]) -> str:
     brief_requirements = state.get("brief_requirements", [])
     technical_constraints = state.get("technical_constraints", [])
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    readiness_score = int(state.get("readiness_score", 0))
+    blockers = state.get("blockers", [])
 
     report = f"""# Project Rescue Report
 
@@ -108,6 +125,12 @@ Generated at: **{generated_at}**
 
 ## Executive Summary
 This report analyzes the provided project against the assignment brief and identifies the most important gaps before submission.
+
+## Submission Readiness Score
+**{readiness_score}/100**
+
+## Current Blockers
+{_format_list(blockers)}
 
 ## Brief Summary
 {brief_summary}
@@ -146,7 +169,7 @@ This report analyzes the provided project against the assignment brief and ident
 {_format_list(outline)}
 
 ## Final Recommendation
-Focus first on the highest-risk gaps that directly affect assignment marks: missing agents, missing tests, missing observability, and missing final output/report generation.
+{_final_recommendation(readiness_score)}
 """
     return report.strip() + "\n"
 

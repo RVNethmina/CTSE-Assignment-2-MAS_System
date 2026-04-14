@@ -102,10 +102,10 @@
     "Verify the project runs fully locally and does not depend on paid APIs."
   ],
   "member_assignments": [
-    "Student 1: Finalize Intake and Scope Agent and input validation tests.",
-    "Student 2: Finalize Brief and Rubric Analyst Agent and brief extraction tests.",
-    "Student 3: Finalize Repository and Evidence Auditor Agent and repo audit tests.",
-    "Student 4: Finalize Risk and Delivery Strategist Agent, report generation, and integration checks."
+    "Student 1: Build the missing agent modules so the system reaches the required 3 to 4 distinct agents.",
+    "Student 2: Create per-agent tests and one integration test for the full workflow.",
+    "Student 3: Implement structured logging or tracing and make it clearly visible in the demo.",
+    "Student 4: Implement final output/report generation and polish the rescue report for submission."
   ],
   "demo_checklist": [
     "Run the full workflow locally using Ollama.",
@@ -127,9 +127,16 @@
     "Individual contributions",
     "Challenges and lessons learned"
   ],
+  "readiness_score": 15,
+  "blockers": [
+    "Agent count is below the required 3 to 4 distinct agents.",
+    "Automated testing evidence is missing.",
+    "Logging or tracing evidence is missing.",
+    "Final output/report generation evidence is missing."
+  ],
   "logs": [
     {
-      "timestamp": "2026-04-14T11:51:41.170694+00:00",
+      "timestamp": "2026-04-14T12:18:09.627896+00:00",
       "agent": "IntakeAndScopeAgent",
       "level": "INFO",
       "message": "Input validation completed successfully.",
@@ -139,7 +146,7 @@
       }
     },
     {
-      "timestamp": "2026-04-14T11:51:53.082215+00:00",
+      "timestamp": "2026-04-14T12:18:21.615149+00:00",
       "agent": "BriefAndRubricAnalystAgent",
       "level": "INFO",
       "message": "Brief analysis completed.",
@@ -151,7 +158,7 @@
       }
     },
     {
-      "timestamp": "2026-04-14T11:51:53.086254+00:00",
+      "timestamp": "2026-04-14T12:18:21.617928+00:00",
       "agent": "RepositoryAndEvidenceAuditorAgent",
       "level": "INFO",
       "message": "Repository audit completed.",
@@ -205,6 +212,21 @@
         "test_file_count": 0,
         "has_logging_evidence": false
       }
+    },
+    {
+      "timestamp": "2026-04-14T12:18:21.617928+00:00",
+      "agent": "RiskAndDeliveryStrategistAgent",
+      "level": "INFO",
+      "message": "Rescue strategy generated and output files written.",
+      "details": {
+        "risks_count": 4,
+        "actions_count": 6,
+        "blockers_count": 4,
+        "readiness_score": 15,
+        "markdown_path": "outputs\\rescue_report.md",
+        "json_path": "outputs\\rescue_report.json"
+      }
     }
-  ]
+  ],
+  "final_report_path": "outputs\\rescue_report.md"
 }

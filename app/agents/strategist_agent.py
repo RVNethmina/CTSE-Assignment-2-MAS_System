@@ -4,6 +4,105 @@ from app.models.state import ProjectState, ensure_defaults, make_log_entry
 from app.tools.rescue_plan_writer import write_rescue_outputs
 from app.utils.logger import setup_logger
 
+def _dedupe_keep_order(items: list[str]) -> list[str]:
+    """Remove duplicates while preserving order."""
+    seen: set[str] = set()
+    result: list[str] = []
+
+    for item in items:
+        cleaned = item.strip()
+        if not cleaned or cleaned in seen:
+            continue
+        seen.add(cleaned)
+        result.append(cleaned)
+
+    return result
+
+
+def _calculate_readiness_score(
+    *,
+    agent_file_count: int,
+    tool_file_count: int,
+    test_file_count: int,
+    has_logging_evidence: bool,
+    has_output_writer_evidence: bool,
+    missing_artifacts: list[str],
+) -> int:
+    """Calculate a simple submission readiness score out of 100."""
+    score = 100
+
+    if "insufficient_agents" in missing_artifacts or agent_file_count < 3:
+        score -= 25
+
+    if "tests" in missing_artifacts or test_file_count == 0:
+        score -= 25
+
+    if "missing_logging" in missing_artifacts or not has_logging_evidence:
+        score -= 20
+
+    if "missing_output_writer" in missing_artifacts or not has_output_writer_evidence:
+        score -= 15
+
+    if "missing_tools" in missing_artifacts or tool_file_count < 1:
+        score -= 15
+
+    return max(score, 0)
+
+
+def _build_dynamic_assignments(
+    *,
+    missing_artifacts: list[str],
+    agent_file_count: int,
+    tool_file_count: int,
+    test_file_count: int,
+    has_logging_evidence: bool,
+    has_output_writer_evidence: bool,
+) -> list[str]:
+    """Generate team ownership suggestions based on actual project gaps."""
+    assignments: list[str] = []
+
+    if "insufficient_agents" in missing_artifacts or agent_file_count < 3:
+        assignments.append(
+            "Student 1: Build the missing agent modules so the system reaches the required 3 to 4 distinct agents."
+        )
+    else:
+        assignments.append(
+            "Student 1: Refine the Intake and Scope Agent and improve input validation edge cases."
+        )
+
+    if "tests" in missing_artifacts or test_file_count == 0:
+        assignments.append(
+            "Student 2: Create per-agent tests and one integration test for the full workflow."
+        )
+    else:
+        assignments.append(
+            "Student 2: Expand evaluation coverage with stronger edge-case and failure-path tests."
+        )
+
+    if "missing_tools" in missing_artifacts or tool_file_count < 1:
+        assignments.append(
+            "Student 3: Build the missing custom tool layer and connect tool usage clearly to the agents."
+        )
+    elif "missing_logging" in missing_artifacts or not has_logging_evidence:
+        assignments.append(
+            "Student 3: Implement structured logging or tracing and make it clearly visible in the demo."
+        )
+    else:
+        assignments.append(
+            "Student 3: Improve repository auditing depth and observability quality."
+        )
+
+    if "missing_output_writer" in missing_artifacts or not has_output_writer_evidence:
+        assignments.append(
+            "Student 4: Implement final output/report generation and polish the rescue report for submission."
+        )
+    else:
+        assignments.append(
+            "Student 4: Polish the final report, demo flow, and submission packaging."
+        )
+
+    return assignments
+
 
 def strategist_agent_node(state: ProjectState) -> ProjectState:
     """
@@ -29,6 +128,7 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
     risks: list[str] = []
     actions: list[str] = []
     assignments: list[str] = []
+    blockers: list[str] = []   
     checklist: list[str] = []
     outline: list[str] = []
 
@@ -68,15 +168,34 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
 
     if brief_requirements:
         actions.append("Cross-check the implemented system against all extracted assignment requirements.")
+
     if technical_constraints:
         actions.append("Verify the project runs fully locally and does not depend on paid APIs.")
 
-    assignments = [
-        "Student 1: Finalize Intake and Scope Agent and input validation tests.",
-        "Student 2: Finalize Brief and Rubric Analyst Agent and brief extraction tests.",
-        "Student 3: Finalize Repository and Evidence Auditor Agent and repo audit tests.",
-        "Student 4: Finalize Risk and Delivery Strategist Agent, report generation, and integration checks.",
-    ]
+    if "insufficient_agents" in missing_artifacts or agent_file_count < 3:
+        blockers.append("Agent count is below the required 3 to 4 distinct agents.")
+
+    if "tests" in missing_artifacts or test_file_count == 0:
+        blockers.append("Automated testing evidence is missing.")
+
+    if "missing_logging" in missing_artifacts or not has_logging_evidence:
+        blockers.append("Logging or tracing evidence is missing.")
+
+    if "missing_output_writer" in missing_artifacts or not has_output_writer_evidence:
+        blockers.append("Final output/report generation evidence is missing.")
+
+    risks = _dedupe_keep_order(risks)
+    actions = _dedupe_keep_order(actions)
+    blockers = _dedupe_keep_order(blockers)
+
+    assignments = _build_dynamic_assignments(
+        missing_artifacts=missing_artifacts,
+        agent_file_count=agent_file_count,
+        tool_file_count=tool_file_count,
+        test_file_count=test_file_count,
+        has_logging_evidence=has_logging_evidence,
+        has_output_writer_evidence=bool(repo_audit.get("has_output_writer_evidence", False)),
+    )
 
     checklist = [
         "Run the full workflow locally using Ollama.",
@@ -102,18 +221,24 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
 
     state["risks"] = risks
     state["recommended_actions"] = actions
+    state["blockers"] = blockers
+    state["readiness_score"] = _calculate_readiness_score(
+        agent_file_count=agent_file_count,
+        tool_file_count=tool_file_count,
+        test_file_count=test_file_count,
+        has_logging_evidence=has_logging_evidence,
+        has_output_writer_evidence=bool(repo_audit.get("has_output_writer_evidence", False)),
+        missing_artifacts=missing_artifacts,
+    )
     state["member_assignments"] = assignments
     state["demo_checklist"] = checklist
     state["report_outline"] = outline
 
-    write_result = write_rescue_outputs(state)
+    output_dir = "outputs"
+    markdown_path = f"{output_dir}\\rescue_report.md"
+    json_path = f"{output_dir}\\rescue_report.json"
 
-    state["final_report_path"] = write_result.markdown_path
-
-    if write_result.issues:
-        state["validation_issues"].extend(write_result.issues)
-
-    logger.info("Strategist agent completed successfully.")
+    state["final_report_path"] = markdown_path
 
     state["logs"].append(
         make_log_entry(
@@ -123,10 +248,19 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
             details={
                 "risks_count": len(risks),
                 "actions_count": len(actions),
-                "markdown_path": write_result.markdown_path,
-                "json_path": write_result.json_path,
+                "blockers_count": len(blockers),
+                "readiness_score": state["readiness_score"],
+                "markdown_path": markdown_path,
+                "json_path": json_path,
             },
         )
     )
+
+    write_result = write_rescue_outputs(state, output_dir=output_dir)
+
+    if write_result.issues:
+        state["validation_issues"].extend(write_result.issues)
+
+    logger.info("Strategist agent completed successfully.")
 
     return state
