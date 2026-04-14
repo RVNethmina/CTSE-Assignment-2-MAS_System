@@ -18,6 +18,11 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
     logger.info("Strategist agent started.")
 
     missing_artifacts = state.get("missing_artifacts", [])
+    repo_audit = state.get("repo_findings", {}).get("repo_audit", {})
+    agent_file_count = int(repo_audit.get("agent_file_count", 0))
+    tool_file_count = int(repo_audit.get("tool_file_count", 0))
+    test_file_count = int(repo_audit.get("test_file_count", 0))
+    has_logging_evidence = bool(repo_audit.get("has_logging_evidence", False))
     brief_requirements = state.get("brief_requirements", [])
     technical_constraints = state.get("technical_constraints", [])
 
@@ -42,6 +47,24 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
     if "configuration" in missing_artifacts:
         risks.append("Configuration or dependency evidence is missing, making the project harder to run and assess.")
         actions.append("Add clear dependency and configuration files such as requirements.txt or pyproject.toml.")
+    
+    if "insufficient_agents" in missing_artifacts or agent_file_count < 3:
+        risks.append(
+            f"Only {agent_file_count} agent file(s) were detected, which may fail the 3 to 4 agent requirement."
+        )
+        actions.append("Implement at least 3 to 4 distinct agent modules with clear responsibilities.")
+
+    if "missing_tools" in missing_artifacts or tool_file_count < 1:
+        risks.append("No strong custom tool evidence was detected.")
+        actions.append("Add at least one meaningful custom Python tool that interacts with files, terminal, database, or APIs.")
+
+    if "missing_logging" in missing_artifacts or not has_logging_evidence:
+        risks.append("Logging or tracing evidence is missing, which weakens observability marks.")
+        actions.append("Implement structured logging or tracing and show it clearly in the demo.")
+
+    if test_file_count == 0:
+        risks.append("No test files were detected in the repository.")
+        actions.append("Add per-agent tests and one workflow integration test.")
 
     if brief_requirements:
         actions.append("Cross-check the implemented system against all extracted assignment requirements.")

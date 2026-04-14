@@ -13,6 +13,11 @@ class RepoAuditResult:
     detected_artifacts: list[str]
     important_files: list[str]
     directory_summary: dict[str, int]
+    agent_file_count: int
+    tool_file_count: int
+    test_file_count: int
+    has_logging_evidence: bool
+    has_output_writer_evidence: bool
     issues: list[str]
 
     def to_dict(self) -> dict[str, object]:
@@ -73,6 +78,11 @@ def audit_repository(project_path: str) -> RepoAuditResult:
             detected_artifacts=[],
             important_files=[],
             directory_summary={},
+            agent_file_count = 0,
+            tool_file_count = 0,
+            test_file_count = 0,
+            has_logging_evidence = False,
+            has_output_writer_evidence = False,
             issues=[f"Project path not found: {project_path}"],
         )
 
@@ -164,8 +174,27 @@ def audit_repository(project_path: str) -> RepoAuditResult:
 
     if total_files == 0:
         issues.append("Project contains no files.")
+    
+    relative_path = _safe_relative_path(path, root).replace("\\", "/")
+    path_parts_lower = [part.lower() for part in path.parts]
 
-    return RepoAuditResult(
+    if "agents" in path_parts_lower and path.suffix.lower() == ".py":
+        agent_file_count += 1
+
+    if "tools" in path_parts_lower and path.suffix.lower() == ".py":
+        tool_file_count += 1
+
+    if "tests" in path_parts_lower or path.name.lower().startswith("test_"):
+        test_file_count += 1
+        detected_artifacts.add("tests")
+
+    if path.name.lower() in {"logger.py", "logging.py"}:
+        has_logging_evidence = True
+
+    if any(keyword in path.name.lower() for keyword in ("writer", "report", "output")):
+        has_output_writer_evidence = True
+
+        return RepoAuditResult(
         project_path=str(root),
         total_files=total_files,
         total_directories=total_directories,
@@ -173,5 +202,10 @@ def audit_repository(project_path: str) -> RepoAuditResult:
         detected_artifacts=sorted(detected_artifacts),
         important_files=sorted(set(important_files)),
         directory_summary=directory_summary,
+        agent_file_count=agent_file_count,
+        tool_file_count=tool_file_count,
+        test_file_count=test_file_count,
+        has_logging_evidence=has_logging_evidence,
+        has_output_writer_evidence=has_output_writer_evidence,
         issues=issues,
     )
