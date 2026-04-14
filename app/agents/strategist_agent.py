@@ -122,7 +122,7 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
     tool_file_count = int(repo_audit.get("tool_file_count", 0))
     test_file_count = int(repo_audit.get("test_file_count", 0))
     has_logging_evidence = bool(repo_audit.get("has_logging_evidence", False))
-    has_output_writer_evidence = has_output_writer_evidence
+    has_output_writer_evidence = bool(repo_audit.get("has_output_writer_evidence", False))
     brief_requirements = state.get("brief_requirements", [])
     technical_constraints = state.get("technical_constraints", [])
 

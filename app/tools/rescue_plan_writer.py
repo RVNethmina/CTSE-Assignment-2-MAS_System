@@ -102,6 +102,54 @@ def _final_recommendation(readiness_score: int) -> str:
     return "The project is not submission-ready yet. Resolve the critical blockers first: missing agents, missing tests, missing observability, and missing final output generation."
 
 
+def _agent_design_snapshot(state: dict[str, Any]) -> str:
+    """Render a markdown snapshot of agent design details."""
+    profiles = state.get("agent_profiles", {})
+    if not profiles:
+        return "- None"
+
+    sections: list[str] = []
+    for agent_name, profile in profiles.items():
+        sections.append(
+            "\n".join(
+                [
+                    f"### {agent_name}",
+                    f"- **Owner:** {profile.get('student_owner', 'Unknown')}",
+                    f"- **Role:** {profile.get('role', 'Unknown')}",
+                    f"- **Persona:** {profile.get('persona', 'Unknown')}",
+                    f"- **Objective:** {profile.get('objective', 'Unknown')}",
+                    f"- **Constraints:** {profile.get('constraints', 'Unknown')}",
+                    f"- **Owned Tool:** {profile.get('owned_tool', 'Unknown')}",
+                    f"- **System Prompt:** {profile.get('system_prompt', 'Unknown')}",
+                ]
+            )
+        )
+
+    return "\n\n".join(sections)
+
+
+def _contribution_matrix(state: dict[str, Any]) -> str:
+    """Render a contribution matrix for the report."""
+    profiles = state.get("agent_profiles", {})
+    if not profiles:
+        return "- None"
+
+    lines = [
+        "| Student | Agent | Owned Tool | Main Focus |",
+        "|---|---|---|---|",
+    ]
+
+    for _, profile in profiles.items():
+        lines.append(
+            f"| {profile.get('student_owner', 'Unknown')} | "
+            f"{profile.get('role', 'Unknown')} | "
+            f"{profile.get('owned_tool', 'Unknown')} | "
+            f"{profile.get('objective', 'Unknown')} |"
+        )
+
+    return "\n".join(lines)
+
+
 def build_markdown_report(state: dict[str, Any]) -> str:
     """Build a polished markdown rescue report from workflow state."""
     brief_summary = state.get("brief_summary", "No brief summary available.")
@@ -118,6 +166,8 @@ def build_markdown_report(state: dict[str, Any]) -> str:
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     readiness_score = int(state.get("readiness_score", 0))
     blockers = state.get("blockers", [])
+    agent_design_snapshot = _agent_design_snapshot(state)
+    contribution_matrix = _contribution_matrix(state)
 
     report = f"""# Project Rescue Report
 
@@ -140,6 +190,12 @@ This report analyzes the provided project against the assignment brief and ident
 
 ## Technical Constraints
 {_format_list(technical_constraints)}
+
+## Agent Design Snapshot
+{agent_design_snapshot}
+
+## Contribution Matrix
+{contribution_matrix}
 
 ## Repository Summary
 {repo_summary}

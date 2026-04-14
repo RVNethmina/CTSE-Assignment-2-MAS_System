@@ -3,6 +3,7 @@ from __future__ import annotations
 from app.models.state import ProjectState, ensure_defaults, make_log_entry
 from app.tools.project_input_validator import validate_project_inputs
 from app.utils.logger import setup_logger
+from app.agents.profiles import AGENT_PROFILES
 
 
 def intake_agent_node(state: ProjectState) -> ProjectState:
@@ -14,6 +15,9 @@ def intake_agent_node(state: ProjectState) -> ProjectState:
     """
     logger = setup_logger()
     state = ensure_defaults(state)
+    
+    if not state.get("agent_profiles"):
+        state["agent_profiles"] = AGENT_PROFILES.copy()
 
     brief_path = state.get("brief_path", "")
     project_path = state.get("project_path", "")

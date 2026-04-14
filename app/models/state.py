@@ -44,6 +44,7 @@ class ProjectState(TypedDict, total=False):
     final_report_path: str
     readiness_score: int
     blockers: list[str]
+    agent_profiles: dict[str, dict[str, str]]
 
     logs: list[LogEntry]
 
@@ -67,6 +68,7 @@ def ensure_defaults(state: ProjectState) -> ProjectState:
     state.setdefault("logs", [])
     state.setdefault("readiness_score", 0)
     state.setdefault("blockers", [])
+    state.setdefault("agent_profiles", {})  
     return state
 
 
