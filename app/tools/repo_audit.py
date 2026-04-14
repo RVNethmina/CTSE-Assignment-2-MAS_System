@@ -135,6 +135,15 @@ def audit_repository(project_path: str) -> RepoAuditResult:
         if path.is_file():
             total_files += 1
 
+            if path.name.lower() == "readme.md":
+                detected_artifacts.add("documentation")
+
+            if path.name.lower() in {"requirements.txt", "pyproject.toml", "package.json"}:
+                detected_artifacts.add("configuration")
+
+            if path.suffix.lower() == ".py":
+                detected_artifacts.add("source_code")
+
             if path.name in IMPORTANT_FILENAMES or name_lower in IMPORTANT_FILENAMES:
                 important_files.append(_safe_relative_path(path, root))
 
