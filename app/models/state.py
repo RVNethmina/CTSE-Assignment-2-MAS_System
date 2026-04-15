@@ -45,6 +45,9 @@ class ProjectState(TypedDict, total=False):
     readiness_score: int
     blockers: list[str]
     agent_profiles: dict[str, dict[str, str]]
+    intake_summary: str
+    audit_summary: str
+    executive_summary: str
 
     logs: list[LogEntry]
 

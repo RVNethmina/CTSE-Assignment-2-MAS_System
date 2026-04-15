@@ -154,6 +154,9 @@ def build_markdown_report(state: dict[str, Any]) -> str:
     """Build a polished markdown rescue report from workflow state."""
     brief_summary = state.get("brief_summary", "No brief summary available.")
     repo_summary = state.get("repo_summary", "No repository summary available.")
+    executive_summary = state.get("executive_summary", "")
+    intake_summary = state.get("intake_summary", "")
+    audit_summary = state.get("audit_summary", "")
     present_artifacts = state.get("present_artifacts", [])
     missing_artifacts = state.get("missing_artifacts", [])
     risks = state.get("risks", [])
@@ -169,18 +172,26 @@ def build_markdown_report(state: dict[str, Any]) -> str:
     agent_design_snapshot = _agent_design_snapshot(state)
     contribution_matrix = _contribution_matrix(state)
 
+    executive_block = executive_summary if executive_summary else (
+        "This report analyzes the provided project against the assignment brief "
+        "and identifies the most important gaps before submission."
+    )
+
     report = f"""# Project Rescue Report
 
 Generated at: **{generated_at}**
 
 ## Executive Summary
-This report analyzes the provided project against the assignment brief and identifies the most important gaps before submission.
+{executive_block}
 
 ## Submission Readiness Score
 **{readiness_score}/100**
 
 ## Current Blockers
 {_format_list(blockers)}
+
+## Intake Validation Summary
+{intake_summary or "No intake summary available."}
 
 ## Brief Summary
 {brief_summary}
@@ -199,6 +210,9 @@ This report analyzes the provided project against the assignment brief and ident
 
 ## Repository Summary
 {repo_summary}
+
+## Repository Audit Analysis
+{audit_summary or "No audit analysis available."}
 
 ## Compliance Snapshot
 {_compliance_snapshot(state)}

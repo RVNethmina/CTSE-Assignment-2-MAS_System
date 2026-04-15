@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from app.agents import brief_analyst_agent
+from app.agents import brief_analyst_agent, intake_agent, repo_auditor_agent, strategist_agent
 from app.graph.workflow import build_workflow
 from app.models.state import ProjectState
 
@@ -38,6 +38,21 @@ def test_full_workflow_runs_with_mocked_llm(
         "_run_llm_extraction",
         fake_llm_extraction,
     )
+    monkeypatch.setattr(
+        intake_agent,
+        "_run_intake_reasoning",
+        lambda validation_issues, project_type, model_name: "Mocked intake summary.",
+    )
+    monkeypatch.setattr(
+        repo_auditor_agent,
+        "_run_audit_reasoning",
+        lambda repo_summary, missing_artifacts, model_name: "Mocked audit summary.",
+    )
+    monkeypatch.setattr(
+        strategist_agent,
+        "_run_strategy_reasoning",
+        lambda risks, actions, model_name: "Mocked executive summary.",
+    )
 
     workflow = build_workflow()
 
@@ -59,3 +74,6 @@ def test_full_workflow_runs_with_mocked_llm(
     assert len(final_state["recommended_actions"]) > 0
     assert final_state["final_report_path"].endswith("rescue_report.md")
     assert len(final_state["logs"]) == 4
+    assert final_state["intake_summary"] == "Mocked intake summary."
+    assert final_state["audit_summary"] == "Mocked audit summary."
+    assert final_state["executive_summary"] == "Mocked executive summary."

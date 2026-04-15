@@ -3,6 +3,38 @@ from __future__ import annotations
 from app.models.state import ProjectState, ensure_defaults, make_log_entry
 from app.tools.repo_audit import audit_repository
 from app.utils.logger import setup_logger
+from app.agents.profiles import AGENT_PROFILES
+
+
+def _run_audit_reasoning(
+    repo_summary: str,
+    missing_artifacts: list[str],
+    model_name: str,
+) -> str:
+    """Use local LLM to generate a plain-language summary of audit findings."""
+    from langchain_ollama import ChatOllama
+
+    profile = AGENT_PROFILES["RepositoryAndEvidenceAuditorAgent"]
+    llm = ChatOllama(model=model_name, temperature=0)
+
+    missing_text = "\n".join(f"- {m}" for m in missing_artifacts) if missing_artifacts else "- None"
+
+    prompt = f"""
+{profile["system_prompt"]}
+
+Based on the audit findings below, write a 2-3 sentence summary of the repository's
+current state. Be direct. Do not invent issues not listed.
+
+Repository overview: {repo_summary}
+
+Missing or weak areas:
+{missing_text}
+
+Return only the summary text, no markdown, no preamble.
+""".strip()
+
+    response = llm.invoke(prompt)
+    return response.content.strip() if isinstance(response.content, str) else ""
 
 
 def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
@@ -64,6 +96,17 @@ def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
 
     if not audit_result.has_output_writer_evidence:
         state["missing_artifacts"].append("missing_output_writer")
+
+    # --- LLM reasoning step ---
+    model_name = state.get("llm_model", "llama3")
+    try:
+        state["audit_summary"] = _run_audit_reasoning(
+            repo_summary=state["repo_summary"],
+            missing_artifacts=state["missing_artifacts"],
+            model_name=model_name,
+        )
+    except Exception:
+        state["audit_summary"] = "Audit summary could not be generated."
 
     logger.info("Repository auditor agent completed successfully.")
 

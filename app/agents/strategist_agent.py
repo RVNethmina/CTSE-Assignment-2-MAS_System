@@ -1,8 +1,41 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from app.models.state import ProjectState, ensure_defaults, make_log_entry
 from app.tools.rescue_plan_writer import write_rescue_outputs
 from app.utils.logger import setup_logger
+from app.agents.profiles import AGENT_PROFILES
+
+
+def _run_strategy_reasoning(
+    risks: list[str],
+    actions: list[str],
+    model_name: str,
+) -> str:
+    """Use local LLM to generate a plain-language executive summary of the rescue plan."""
+    from langchain_ollama import ChatOllama
+
+    profile = AGENT_PROFILES["RiskAndDeliveryStrategistAgent"]
+    llm = ChatOllama(model=model_name, temperature=0)
+
+    prompt = f"""
+{profile["system_prompt"]}
+
+Based on the following risks and actions, write a 2-3 sentence executive summary
+of the project's submission readiness. Be direct. Do not invent new issues.
+
+Risks:
+{chr(10).join(f"- {r}" for r in risks[:5])}
+
+Actions:
+{chr(10).join(f"- {a}" for a in actions[:5])}
+
+Return only the summary text, no markdown, no preamble.
+""".strip()
+
+    response = llm.invoke(prompt)
+    return response.content.strip() if isinstance(response.content, str) else ""
 
 def _dedupe_keep_order(items: list[str]) -> list[str]:
     """Remove duplicates while preserving order."""
@@ -235,9 +268,19 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
     state["demo_checklist"] = checklist
     state["report_outline"] = outline
 
+    # --- LLM reasoning step ---
+    model_name = state.get("llm_model", "llama3")
+    try:
+        state["executive_summary"] = _run_strategy_reasoning(
+            risks, actions, model_name
+        )
+    except Exception:
+        state["executive_summary"] = "Executive summary could not be generated."
+
     output_dir = "outputs"
-    markdown_path = f"{output_dir}\\rescue_report.md"
-    json_path = f"{output_dir}\\rescue_report.json"
+    out = Path(output_dir)
+    markdown_path = str(out / "rescue_report.md")
+    json_path = str(out / "rescue_report.json")
 
     state["final_report_path"] = markdown_path
 

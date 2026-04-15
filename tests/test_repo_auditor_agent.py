@@ -2,11 +2,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from app.agents import repo_auditor_agent
 from app.agents.repo_auditor_agent import repo_auditor_agent_node
 from app.models.state import ProjectState
 
 
-def test_repo_auditor_agent_minimal_project(minimal_project_dir: Path) -> None:
+def test_repo_auditor_agent_minimal_project(
+    minimal_project_dir: Path, monkeypatch,
+) -> None:
+    monkeypatch.setattr(
+        repo_auditor_agent,
+        "_run_audit_reasoning",
+        lambda repo_summary, missing_artifacts, model_name: "Mocked audit summary.",
+    )
+
     state: ProjectState = {
         "project_path": str(minimal_project_dir),
         "validation_issues": [],
@@ -23,9 +32,18 @@ def test_repo_auditor_agent_minimal_project(minimal_project_dir: Path) -> None:
     assert "source_code" in result["missing_artifacts"]
     assert "tests" in result["missing_artifacts"]
     assert result["logs"][-1]["agent"] == "RepositoryAndEvidenceAuditorAgent"
+    assert result["audit_summary"] == "Mocked audit summary."
 
 
-def test_repo_auditor_agent_richer_project(richer_project_dir: Path) -> None:
+def test_repo_auditor_agent_richer_project(
+    richer_project_dir: Path, monkeypatch,
+) -> None:
+    monkeypatch.setattr(
+        repo_auditor_agent,
+        "_run_audit_reasoning",
+        lambda repo_summary, missing_artifacts, model_name: "Mocked audit summary.",
+    )
+
     state: ProjectState = {
         "project_path": str(richer_project_dir),
         "validation_issues": [],
@@ -47,8 +65,14 @@ def test_repo_auditor_agent_richer_project(richer_project_dir: Path) -> None:
     assert "configuration" not in result["missing_artifacts"]
 
 
-def test_repo_auditor_agent_missing_path() -> None:
+def test_repo_auditor_agent_missing_path(monkeypatch) -> None:
     """Security / edge-case: nonexistent project path should not raise."""
+    monkeypatch.setattr(
+        repo_auditor_agent,
+        "_run_audit_reasoning",
+        lambda repo_summary, missing_artifacts, model_name: "Mocked audit summary.",
+    )
+
     state: ProjectState = {
         "project_path": "/this/does/not/exist",
         "validation_issues": [],

@@ -95,6 +95,11 @@ def audit_repository(project_path: str) -> RepoAuditResult:
             detected_artifacts=[],
             important_files=[],
             directory_summary={},
+            agent_file_count=0,
+            tool_file_count=0,
+            test_file_count=0,
+            has_logging_evidence=False,
+            has_output_writer_evidence=False,
             issues=[f"Project path is not a directory: {project_path}"],
         )
 
@@ -125,6 +130,11 @@ def audit_repository(project_path: str) -> RepoAuditResult:
             detected_artifacts=[],
             important_files=[],
             directory_summary={},
+            agent_file_count=0,
+            tool_file_count=0,
+            test_file_count=0,
+            has_logging_evidence=False,
+            has_output_writer_evidence=False,
             issues=[f"Could not list project directory: {exc}"],
         )
 
