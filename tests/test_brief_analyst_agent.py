@@ -95,3 +95,23 @@ def test_brief_analyst_agent_fallback_path(
     assert result["brief_summary"] != ""
     assert len(result["brief_requirements"]) > 0
     assert result["logs"][-1]["details"]["used_fallback"] is True
+
+
+def test_brief_analyst_agent_empty_brief(tmp_path: Path, monkeypatch) -> None:
+    """Security / edge-case: empty brief content should not crash."""
+    empty_brief = tmp_path / "empty.md"
+    empty_brief.write_text("", encoding="utf-8")
+
+    state: ProjectState = {
+        "brief_path": str(empty_brief),
+        "project_path": str(tmp_path),
+        "llm_model": "llama3",
+        "validation_issues": [],
+        "repo_findings": {},
+        "logs": [],
+    }
+
+    result = brief_analyst_agent.brief_analyst_agent_node(state)
+
+    # Should not crash; should record a warning
+    assert any(entry["level"] == "WARNING" for entry in result["logs"])

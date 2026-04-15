@@ -205,3 +205,101 @@
 2026-04-14 18:16:54,464 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
 2026-04-14 18:16:54,466 | INFO | project_rescue_mas | Strategist agent started.
 2026-04-14 18:16:54,468 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 19:06:42,176 | INFO | project_rescue_mas | Starting Project Rescue MAS workflow.
+2026-04-15 19:06:42,211 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 19:06:42,213 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 19:06:42,215 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 19:06:57,216 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 19:06:57,219 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 19:06:57,226 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 19:06:57,229 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 19:06:57,233 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 23:10:17,274 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:10:17,290 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:10:17,294 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:10:17,295 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:10:17,298 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:10:17,298 | WARNING | project_rescue_mas | Brief analyst agent could not extract brief content.
+2026-04-15 23:10:17,301 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:10:17,301 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 23:10:17,306 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:10:17,306 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-15 23:10:17,309 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:10:17,310 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-15 23:10:17,313 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:10:17,314 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:10:17,375 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:10:17,376 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:10:17,377 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:10:17,377 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:10:17,379 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 23:10:17,380 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 23:10:17,403 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:10:17,404 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 23:10:17,405 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:10:17,406 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:10:17,406 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:10:17,407 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:10:17,408 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 23:10:17,410 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 23:15:00,434 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:15:00,436 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:15:00,439 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:15:00,440 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:15:00,444 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:15:00,444 | WARNING | project_rescue_mas | Brief analyst agent could not extract brief content.
+2026-04-15 23:15:00,448 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:15:00,449 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 23:15:00,452 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:15:00,453 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-15 23:15:00,455 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:15:00,456 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-15 23:15:00,461 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:15:00,462 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:15:00,468 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:15:00,469 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:15:00,471 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:15:00,472 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:15:00,475 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 23:15:00,477 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 23:15:00,498 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:15:00,499 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 23:15:00,499 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:15:00,501 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:15:00,501 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:15:00,502 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:15:00,503 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 23:15:00,504 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 23:15:14,876 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:15:17,260 | WARNING | project_rescue_mas | LLM extraction failed. Falling back to heuristic extraction.
+2026-04-15 23:15:17,261 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:16:54,261 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:17:01,456 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:17:09,586 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:17:09,588 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:17:09,592 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:17:09,593 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:17:09,597 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:17:09,597 | WARNING | project_rescue_mas | Brief analyst agent could not extract brief content.
+2026-04-15 23:17:09,601 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:17:09,601 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 23:17:09,606 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:17:09,607 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-15 23:17:09,611 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:17:09,612 | WARNING | project_rescue_mas | Intake agent found validation issues.
+2026-04-15 23:17:09,615 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:17:09,616 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:17:09,620 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:17:09,621 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:17:09,623 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:17:09,623 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:17:09,628 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 23:17:09,631 | INFO | project_rescue_mas | Strategist agent completed successfully.
+2026-04-15 23:17:09,673 | INFO | project_rescue_mas | Intake agent started.
+2026-04-15 23:17:09,674 | INFO | project_rescue_mas | Intake agent validated inputs successfully.
+2026-04-15 23:17:09,675 | INFO | project_rescue_mas | Brief analyst agent started.
+2026-04-15 23:17:09,677 | INFO | project_rescue_mas | Brief analyst agent completed successfully.
+2026-04-15 23:17:09,678 | INFO | project_rescue_mas | Repository auditor agent started.
+2026-04-15 23:17:09,678 | INFO | project_rescue_mas | Repository auditor agent completed successfully.
+2026-04-15 23:17:09,679 | INFO | project_rescue_mas | Strategist agent started.
+2026-04-15 23:17:09,681 | INFO | project_rescue_mas | Strategist agent completed successfully.

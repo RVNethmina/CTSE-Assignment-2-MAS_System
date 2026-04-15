@@ -40,3 +40,17 @@ def test_intake_agent_missing_brief(minimal_project_dir: Path, tmp_path: Path) -
     assert any("Brief file not found" in issue for issue in result["validation_issues"])
     assert result["repo_findings"]["intake_validation"]["brief_path_exists"] is False
     assert result["logs"][0]["level"] == "WARNING"
+
+
+def test_intake_agent_rejects_path_traversal(tmp_path: Path) -> None:
+    """Security / edge-case: path traversal attempt must not raise."""
+    state: ProjectState = {
+        "brief_path": "../../etc/passwd",
+        "project_path": str(tmp_path),
+        "logs": [],
+    }
+
+    result = intake_agent_node(state)
+
+    assert any("not found" in issue.lower() for issue in result["validation_issues"])
+    # Must NOT raise an exception — handles gracefully
