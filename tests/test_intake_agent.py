@@ -77,4 +77,4 @@ def test_intake_agent_rejects_path_traversal(tmp_path: Path, monkeypatch) -> Non
     result = intake_agent_node(state)
 
     assert any("not found" in issue.lower() for issue in result["validation_issues"])
-    # Must NOT raise an exception — handles gracefully
+    # Must NOT raise an exception; handles gracefully.

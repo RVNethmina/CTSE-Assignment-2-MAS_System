@@ -62,7 +62,7 @@ def _format_action_plan(actions: list[str]) -> str:
     lines: list[str] = []
     for action in actions:
         priority = _priority_label(action)
-        lines.append(f"- **{priority}** — {action}")
+        lines.append(f"- **{priority}** - {action}")
     return "\n".join(lines)
 
 

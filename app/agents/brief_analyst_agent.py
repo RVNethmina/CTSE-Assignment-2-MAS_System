@@ -71,7 +71,7 @@ def _heuristic_fallback(brief_text: str) -> dict[str, Any]:
 
     This is intentionally simple but deterministic.
     """
-    lines = [line.strip("•- ").strip() for line in brief_text.splitlines()]
+    lines = [line.strip("*- ").strip() for line in brief_text.splitlines()]
     lines = [line for line in lines if line]
 
     requirement_keywords = (

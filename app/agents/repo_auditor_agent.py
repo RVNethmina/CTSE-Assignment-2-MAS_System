@@ -105,8 +105,21 @@ def repo_auditor_agent_node(state: ProjectState) -> ProjectState:
             missing_artifacts=state["missing_artifacts"],
             model_name=model_name,
         )
-    except Exception:
+    except Exception as exc:
+        logger.warning("Repository audit LLM reasoning failed: %s", exc)
         state["audit_summary"] = "Audit summary could not be generated."
+        state["logs"].append(
+            make_log_entry(
+                agent="RepositoryAndEvidenceAuditorAgent",
+                level="WARNING",
+                message="Repository audit LLM reasoning failed.",
+                details={
+                    "model": model_name,
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                },
+            )
+        )
 
     logger.info("Repository auditor agent completed successfully.")
 

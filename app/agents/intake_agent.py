@@ -72,8 +72,21 @@ def intake_agent_node(state: ProjectState) -> ProjectState:
             project_type=result.likely_stack,
             model_name=model_name,
         )
-    except Exception:
+    except Exception as exc:
+        logger.warning("Intake LLM reasoning failed: %s", exc)
         state["intake_summary"] = "Intake summary could not be generated."
+        state["logs"].append(
+            make_log_entry(
+                agent="IntakeAndScopeAgent",
+                level="WARNING",
+                message="Intake LLM reasoning failed.",
+                details={
+                    "model": model_name,
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                },
+            )
+        )
 
     if result.issues:
         logger.warning("Intake agent found validation issues.")

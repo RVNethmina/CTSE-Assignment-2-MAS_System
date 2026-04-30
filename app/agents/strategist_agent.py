@@ -274,8 +274,21 @@ def strategist_agent_node(state: ProjectState) -> ProjectState:
         state["executive_summary"] = _run_strategy_reasoning(
             risks, actions, model_name
         )
-    except Exception:
+    except Exception as exc:
+        logger.warning("Strategy LLM reasoning failed: %s", exc)
         state["executive_summary"] = "Executive summary could not be generated."
+        state["logs"].append(
+            make_log_entry(
+                agent="RiskAndDeliveryStrategistAgent",
+                level="WARNING",
+                message="Strategy LLM reasoning failed.",
+                details={
+                    "model": model_name,
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                },
+            )
+        )
 
     output_dir = "outputs"
     out = Path(output_dir)

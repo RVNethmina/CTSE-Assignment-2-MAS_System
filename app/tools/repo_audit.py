@@ -47,6 +47,20 @@ ARTIFACT_PATTERNS = {
     "configuration": [".json", ".yaml", ".yml", ".toml", ".ini"],
 }
 
+IGNORED_DIRECTORY_NAMES = {
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pycache__",
+    "htmlcov",
+    "logs",
+    "node_modules",
+    "outputs",
+    "sample_data",
+}
+
 
 def _safe_relative_path(path: Path, root: Path) -> str:
     """Return a path relative to root when possible."""
@@ -54,6 +68,15 @@ def _safe_relative_path(path: Path, root: Path) -> str:
         return str(path.relative_to(root))
     except ValueError:
         return str(path)
+
+
+def _is_ignored_path(path: Path, root: Path) -> bool:
+    """Return True when a path is inside generated, vendor, or cache folders."""
+    try:
+        normalized_parts = {part.lower() for part in path.relative_to(root).parts}
+    except ValueError:
+        normalized_parts = {part.lower() for part in path.parts}
+    return bool(normalized_parts & IGNORED_DIRECTORY_NAMES)
 
 
 def audit_repository(project_path: str) -> RepoAuditResult:
@@ -139,6 +162,9 @@ def audit_repository(project_path: str) -> RepoAuditResult:
         )
 
     for path in root.rglob("*"):
+        if _is_ignored_path(path, root):
+            continue
+
         name_lower = path.name.lower()
 
         if path.is_dir():
@@ -187,10 +213,18 @@ def audit_repository(project_path: str) -> RepoAuditResult:
 
             path_parts_lower = [part.lower() for part in path.parts]
 
-            if "agents" in path_parts_lower and path.suffix.lower() == ".py":
+            if (
+                "agents" in path_parts_lower
+                and path.suffix.lower() == ".py"
+                and name_lower.endswith("_agent.py")
+            ):
                 agent_file_count += 1
 
-            if "tools" in path_parts_lower and path.suffix.lower() == ".py":
+            if (
+                "tools" in path_parts_lower
+                and path.suffix.lower() == ".py"
+                and name_lower != "__init__.py"
+            ):
                 tool_file_count += 1
 
             if "tests" in path_parts_lower or path.name.lower().startswith("test_"):
@@ -223,4 +257,4 @@ def audit_repository(project_path: str) -> RepoAuditResult:
         has_logging_evidence=has_logging_evidence,
         has_output_writer_evidence=has_output_writer_evidence,
         issues=issues,
-    )
+    )
